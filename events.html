@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Around - Events</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0071e3', // Apple blue
+                        secondary: '#f5f5f7', // Apple light gray
+                        dark: '#1d1d1f', // Apple dark
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            /* iPhone 15 Pro dimensions */
+            max-width: 393px;
+            margin: 0 auto;
+            min-height: 852px;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+        }
+        .notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 160px;
+            height: 30px;
+            background-color: black;
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            z-index: 1000;
+        }
+        .safe-area {
+            padding-top: 50px;
+            padding-bottom: 84px; /* Bottom nav + padding */
+            flex: 1;
+            overflow-y: auto;
+        }
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 393px; /* Match body max-width */
+            max-width: 100%;
+            height: 84px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-top: 1px solid #e5e7eb;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .scrollbar-hide {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- iPhone notch simulation -->
+    <div class="notch"></div>
+
+    <!-- Status Bar -->
+    <div class="fixed top-0 left-0 right-0 z-50 px-6 pt-2 pb-1 flex justify-between items-center">
+        <div class="text-sm font-medium">9:41</div>
+        <div class="flex items-center space-x-1.5">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+    
+    <div class="safe-area">
+        <!-- Header -->
+        <div class="px-4 py-2 flex items-center justify-between sticky top-0 bg-white z-10">
+            <h1 class="text-2xl font-bold text-dark">Events</h1>
+            <div class="flex items-center space-x-2">
+                <button class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                    <i class="fas fa-search text-gray-500"></i>
+                </button>
+                <button class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                    <i class="fas fa-sliders-h text-gray-500"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Filter Categories -->
+        <div class="px-4 py-3">
+            <div class="flex space-x-2 overflow-x-auto scrollbar-hide pb-2">
+                <button class="px-4 py-2 bg-primary text-white rounded-full text-sm font-medium whitespace-nowrap">
+                    All Events
+                </button>
+                <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium whitespace-nowrap">
+                    <i class="fas fa-music mr-1"></i> Music
+                </button>
+                <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium whitespace-nowrap">
+                    <i class="fas fa-utensils mr-1"></i> Food
+                </button>
+                <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium whitespace-nowrap">
+                    <i class="fas fa-film mr-1"></i> Arts
+                </button>
+                <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium whitespace-nowrap">
+                    <i class="fas fa-running mr-1"></i> Sports
+                </button>
+                <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium whitespace-nowrap">
+                    <i class="fas fa-graduation-cap mr-1"></i> Education
+                </button>
+            </div>
+        </div>
+        
+        <!-- Today's Events -->
+        <div class="px-4 pt-4">
+            <h2 class="text-lg font-bold text-dark mb-3">Today</h2>
+            
+            <!-- Event Card 1 -->
+            <a href="event-details.html" class="block rounded-xl overflow-hidden shadow-sm border border-gray-200 mb-4">
+                <div class="flex">
+                    <div class="w-24 h-24 bg-gray-200 flex-shrink-0">
+                        <img src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Event" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-3 flex-1">
+                        <div class="flex items-center mb-1">
+                            <span class="text-xs font-medium text-gray-500">8:00 PM</span>
+                            <span class="mx-1 text-gray-300">•</span>
+                            <span class="text-xs font-medium text-gray-500">0.8 mi</span>
+                        </div>
+                        <h3 class="font-semibold text-dark mb-1">Live Jazz at Blue Note</h3>
+                        <p class="text-xs text-gray-500 mb-2">123 Music Ave, Downtown</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="flex -space-x-2">
+                                    <img src="https://randomuser.me/api/portraits/women/12.jpg" class="w-5 h-5 rounded-full border border-white" alt="Attendee">
+                                    <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-5 h-5 rounded-full border border-white" alt="Attendee">
+                                </div>
+                                <span class="text-xs text-gray-500 ml-1">+42</span>
+                            </div>
+                            <span class="text-xs font-medium text-primary">$25</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            
+            <!-- Event Card 2 -->
+            <a href="event-details.html" class="block rounded-xl overflow-hidden shadow-sm border border-gray-200 mb-4">
+                <div class="flex">
+                    <div class="w-24 h-24 bg-gray-200 flex-shrink-0">
+                        <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Event" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-3 flex-1">
+                        <div class="flex items-center mb-1">
+                            <span class="text-xs font-medium text-gray-500">6:30 PM</span>
+                            <span class="mx-1 text-gray-300">•</span>
+                            <span class="text-xs font-medium text-gray-500">1.3 mi</span>
+                        </div>
+                        <h3 class="font-semibold text-dark mb-1">Yoga in the Park</h3>
+                        <p class="text-xs text-gray-500 mb-2">Central Park, East Lawn</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="flex -space-x-2">
+                                    <img src="https://randomuser.me/api/portraits/women/45.jpg" class="w-5 h-5 rounded-full border border-white" alt="Attendee">
+                                    <img src="https://randomuser.me/api/portraits/men/22.jpg" class="w-5 h-5 rounded-full border border-white" alt="Attendee">
+                                </div>
+                                <span class="text-xs text-gray-500 ml-1">+28</span>
+                            </div>
+                            <span class="text-xs font-medium text-primary">Free</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            
+            <!-- Event Card 3 -->
+            <a href="event-details.html" class="block rounded-xl overflow-hidden shadow-sm border border-gray-200 mb-4">
+                <div class="flex">
+                    <div class="w-24 h-24 bg-gray-200 flex-shrink-0">
+                        <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Event" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-3 flex-1">
+                        <div class="flex items-center mb-1">
+                            <span class="text-xs font-medium text-gray-500">9:00 PM</span>
+                            <span class="mx-1 text-gray-300">•</span>
+                            <span class="text-xs font-medium text-gray-500">2.1 mi</span>
+                        </div>
+                        <h3 class="font-semibold text-dark mb-1">DJ Night at Skybar</h3>
+                        <p class="text-xs text-gray-500 mb-2">456 Nightlife St, Downtown</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="flex -space-x-2">
+                                    <img src="https://randomuser.me/api/portraits/men/67.jpg" class="w-5 h-5 rounded-full border border-white" alt="Attendee">
+                                    <img src="https://randomuser.me/api/portraits/women/32.jpg" class="w-5 h-5 rounded-full border border-white" alt="Attendee">
+                                </div>
+                                <span class="text-xs text-gray-500 ml-1">+76</span>
+                            </div>
+                            <span class="text-xs font-medium text-primary">$15</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <!-- Tomorrow's Events -->
+        <div class="px-4 pt-6">
+            <h2 class="text-lg font-bold text-dark mb-3">Tomorrow</h2>
+            
+            <!-- Event Card 1 -->
+            <a href="event-details.html" class="block rounded-xl overflow-hidden shadow-sm border border-gray-200 mb-4">
+                <div class="flex">
+                    <div class="w-24 h-24 bg-gray-200 flex-shrink-0">
+                        <img src="https://images.unsplash.com/photo-1555244162-803834f70033?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Event" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-3 flex-1">
+                        <div class="flex items-center mb-1">
+                            <span class="text-xs font-medium text-gray-500">7:30 PM</span>
+                            <span class="mx-1 text-gray-300">•</span>
+                            <span class="text-xs font-medium text-gray-500">1.2 mi</span>
+                        </div>
+                        <h3 class="font-semibold text-dark mb-1">Food Truck Festival</h3>
+                        <p class="text-xs text-gray-500 mb-2">Civic Center Plaza</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="flex -space-x-2">
+                                    <img src="https://randomuser.me/api/portraits/men/45.jpg" class="w-5 h-5 rounded-full border border-white" alt="Attendee">
+                                    <img src="https://randomuser.me/api/portraits/women/67.jpg" class="w-5 h-5 rounded-full border border-white" alt="Attendee">
+                                </div>
+                                <span class="text-xs text-gray-500 ml-1">+89</span>
+                            </div>
+                            <span class="text-xs font-medium text-primary">Free</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            
+            <!-- Event Card 2 -->
+            <a href="event-details.html" class="block rounded-xl overflow-hidden shadow-sm border border-gray-200 mb-4">
+                <div class="flex">
+                    <div class="w-24 h-24 bg-gray-200 flex-shrink-0">
+                        <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Event" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-3 flex-1">
+                        <div class="flex items-center mb-1">
+                            <span class="text-xs font-medium text-gray-500">9:00 AM</span>
+                            <span class="mx-1 text-gray-300">•</span>
+                            <span class="text-xs font-medium text-gray-500">1.5 mi</span>
+                        </div>
+                        <h3 class="font-semibold text-dark mb-1">Tech Conference 2023</h3>
+                        <p class="text-xs text-gray-500 mb-2">Convention Center, Main Hall</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="flex -space-x-2">
+                                    <img src="https://randomuser.me/api/portraits/men/52.jpg" class="w-5 h-5 rounded-full border border-white" alt="Attendee">
+                                    <img src="https://randomuser.me/api/portraits/women/32.jpg" class="w-5 h-5 rounded-full border border-white" alt="Attendee">
+                                </div>
+                                <span class="text-xs text-gray-500 ml-1">+215</span>
+                            </div>
+                            <span class="text-xs font-medium text-primary">$99</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <!-- This Weekend -->
+        <div class="px-4 pt-6 pb-8">
+            <h2 class="text-lg font-bold text-dark mb-3">This Weekend</h2>
+            
+            <!-- Event Card 1 -->
+            <a href="event-details.html" class="block rounded-xl overflow-hidden shadow-sm border border-gray-200 mb-4">
+                <div class="flex">
+                    <div class="w-24 h-24 bg-gray-200 flex-shrink-0">
+                        <img src="https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Event" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-3 flex-1">
+                        <div class="flex items-center mb-1">
+                            <span class="text-xs font-medium text-gray-500">Sat, 8:00 PM</span>
+                            <span class="mx-1 text-gray-300">•</span>
+                            <span class="text-xs font-medium text-gray-500">2.5 mi</span>
+                        </div>
+                        <h3 class="font-semibold text-dark mb-1">Rooftop Cocktail Party</h3>
+                        <p class="text-xs text-gray-500 mb-2">Skyline Lounge, 30th Floor</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="flex -space-x-2">
+                                    <img src="https://randomuser.me/api/portraits/women/28.jpg" class="w-5 h-5 rounded-full border border-white" alt="Attendee">
+                                    <img src="https://randomuser.me/api/portraits/men/42.jpg" class="w-5 h-5 rounded-full border border-white" alt="Attendee">
+                                </div>
+                                <span class="text-xs text-gray-500 ml-1">+64</span>
+                            </div>
+                            <span class="text-xs font-medium text-primary">$30</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            
+            <!-- Event Card 2 -->
+            <a href="event-details.html" class="block rounded-xl overflow-hidden shadow-sm border border-gray-200 mb-4">
+                <div class="flex">
+                    <div class="w-24 h-24 bg-gray-200 flex-shrink-0">
+                        <img src="https://images.unsplash.com/photo-1560439514-4e9645039924?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Event" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-3 flex-1">
+                        <div class="flex items-center mb-1">
+                            <span class="text-xs font-medium text-gray-500">Sun, 10:00 AM</span>
+                            <span class="mx-1 text-gray-300">•</span>
+                            <span class="text-xs font-medium text-gray-500">3.2 mi</span>
+                        </div>
+                        <h3 class="font-semibold text-dark mb-1">Farmers Market</h3>
+                        <p class="text-xs text-gray-500 mb-2">Community Park, North Entrance</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="flex -space-x-2">
+                                    <img src="https://randomuser.me/api/portraits/women/62.jpg" class="w-5 h-5 rounded-full border border-white" alt="Attendee">
+                                    <img src="https://randomuser.me/api/portraits/men/12.jpg" class="w-5 h-5 rounded-full border border-white" alt="Attendee">
+                                </div>
+                                <span class="text-xs text-gray-500 ml-1">+48</span>
+                            </div>
+                            <span class="text-xs font-medium text-primary">Free</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            
+            <!-- Event Card 3 -->
+            <a href="event-details.html" class="block rounded-xl overflow-hidden shadow-sm border border-gray-200 mb-4">
+                <div class="flex">
+                    <div class="w-24 h-24 bg-gray-200 flex-shrink-0">
+                        <img src="https://images.unsplash.com/photo-1459749411175-04bf5292ceea?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Event" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-3 flex-1">
+                        <div class="flex items-center mb-1">
+                            <span class="text-xs font-medium text-gray-500">Sun, 7:00 PM</span>
+                            <span class="mx-1 text-gray-300">•</span>
+                            <span class="text-xs font-medium text-gray-500">1.8 mi</span>
+                        </div>
+                        <h3 class="font-semibold text-dark mb-1">Indie Film Screening</h3>
+                        <p class="text-xs text-gray-500 mb-2">Art House Cinema, Screen 2</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="flex -space-x-2">
+                                    <img src="https://randomuser.me/api/portraits/men/72.jpg" class="w-5 h-5 rounded-full border border-white" alt="Attendee">
+                                    <img src="https://randomuser.me/api/portraits/women/42.jpg" class="w-5 h-5 rounded-full border border-white" alt="Attendee">
+                                </div>
+                                <span class="text-xs text-gray-500 ml-1">+36</span>
+                            </div>
+                            <span class="text-xs font-medium text-primary">$12</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav flex items-center justify-around px-6">
+        <a href="home.html" class="flex flex-col items-center">
+            <div class="w-10 h-10 flex items-center justify-center text-gray-400">
+                <i class="fas fa-home text-xl"></i>
+            </div>
+            <span class="text-xs font-medium text-gray-400">Home</span>
+        </a>
+        <a href="events.html" class="flex flex-col items-center">
+            <div class="w-10 h-10 flex items-center justify-center text-primary">
+                <i class="fas fa-calendar-alt text-xl"></i>
+            </div>
+            <span class="text-xs font-medium text-primary">Events</span>
+        </a>
+        <a href="chat.html" class="flex flex-col items-center">
+            <div class="w-10 h-10 flex items-center justify-center text-gray-400">
+                <i class="fas fa-comment-alt text-xl"></i>
+            </div>
+            <span class="text-xs font-medium text-gray-400">Chat</span>
+        </a>
+        <a href="profile.html" class="flex flex-col items-center">
+            <div class="w-10 h-10 flex items-center justify-center text-gray-400">
+                <i class="fas fa-user text-xl"></i>
+            </div>
+            <span class="text-xs font-medium text-gray-400">Profile</span>
+        </a>
+    </div>
+</body>
+</html>
