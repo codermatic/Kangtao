@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Around - Settings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0071e3', // Apple blue
+                        secondary: '#f5f5f7', // Apple light gray
+                        dark: '#1d1d1f', // Apple dark
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            /* iPhone 15 Pro dimensions */
+            max-width: 393px;
+            margin: 0 auto;
+            min-height: 852px;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+        }
+        .notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 160px;
+            height: 30px;
+            background-color: black;
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            z-index: 1000;
+        }
+        .safe-area {
+            padding-top: 50px;
+            padding-bottom: 20px;
+            flex: 1;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- iPhone notch simulation -->
+    <div class="notch"></div>
+
+    <!-- Status Bar -->
+    <div class="fixed top-0 left-0 right-0 z-50 px-6 pt-2 pb-1 flex justify-between items-center">
+        <div class="text-sm font-medium">9:41</div>
+        <div class="flex items-center space-x-1.5">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+    
+    <div class="safe-area">
+        <!-- Header with Back Button -->
+        <div class="px-4 py-2 flex items-center sticky top-0 bg-white z-10">
+            <a href="profile.html" class="w-10 h-10 flex items-center justify-center mr-2">
+                <i class="fas fa-chevron-left text-gray-700"></i>
+            </a>
+            <h1 class="text-xl font-bold text-dark">Settings</h1>
+        </div>
+        
+        <!-- Account Settings Section -->
+        <div class="px-4 py-4">
+            <h2 class="text-lg font-semibold text-dark mb-3">Account</h2>
+            
+            <div class="rounded-xl overflow-hidden border border-gray-200 divide-y divide-gray-200">
+                <!-- Profile Info -->
+                <a href="#" class="flex items-center justify-between p-4 bg-white hover:bg-gray-50">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-user text-gray-500"></i>
+                        </div>
+                        <span class="text-gray-700">Personal Information</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                </a>
+                
+                <!-- Security -->
+                <a href="#" class="flex items-center justify-between p-4 bg-white hover:bg-gray-50">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-lock text-gray-500"></i>
+                        </div>
+                        <span class="text-gray-700">Security</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                </a>
+                
+                <!-- Privacy -->
+                <a href="#" class="flex items-center justify-between p-4 bg-white hover:bg-gray-50">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-shield-alt text-gray-500"></i>
+                        </div>
+                        <span class="text-gray-700">Privacy</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                </a>
+                
+                <!-- Payment Methods -->
+                <a href="#" class="flex items-center justify-between p-4 bg-white hover:bg-gray-50">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-credit-card text-gray-500"></i>
+                        </div>
+                        <span class="text-gray-700">Payment Methods</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Preferences Section -->
+        <div class="px-4 py-4">
+            <h2 class="text-lg font-semibold text-dark mb-3">Preferences</h2>
+            
+            <div class="rounded-xl overflow-hidden border border-gray-200 divide-y divide-gray-200">
+                <!-- Notifications -->
+                <div class="flex items-center justify-between p-4 bg-white">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-bell text-gray-500"></i>
+                        </div>
+                        <span class="text-gray-700">Notifications</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" value="" class="sr-only peer" checked>
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                    </label>
+                </div>
+                
+                <!-- Location -->
+                <div class="flex items-center justify-between p-4 bg-white">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-map-marker-alt text-gray-500"></i>
+                        </div>
+                        <span class="text-gray-700">Location Services</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" value="" class="sr-only peer" checked>
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                    </label>
+                </div>
+                
+                <!-- Dark Mode -->
+                <div class="flex items-center justify-between p-4 bg-white">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-moon text-gray-500"></i>
+                        </div>
+                        <span class="text-gray-700">Dark Mode</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" value="" class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                    </label>
+                </div>
+                
+                <!-- Language -->
+                <a href="#" class="flex items-center justify-between p-4 bg-white hover:bg-gray-50">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-globe text-gray-500"></i>
+                        </div>
+                        <span class="text-gray-700">Language</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-gray-500 mr-2">English</span>
+                        <i class="fas fa-chevron-right text-gray-400"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+        
+        <!-- About Section -->
+        <div class="px-4 py-4">
+            <h2 class="text-lg font-semibold text-dark mb-3">About</h2>
+            
+            <div class="rounded-xl overflow-hidden border border-gray-200 divide-y divide-gray-200">
+                <!-- Help Center -->
+                <a href="#" class="flex items-center justify-between p-4 bg-white hover:bg-gray-50">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-question-circle text-gray-500"></i>
+                        </div>
+                        <span class="text-gray-700">Help Center</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                </a>
+                
+                <!-- Terms of Service -->
+                <a href="#" class="flex items-center justify-between p-4 bg-white hover:bg-gray-50">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-file-alt text-gray-500"></i>
+                        </div>
+                        <span class="text-gray-700">Terms of Service</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                </a>
+                
+                <!-- Privacy Policy -->
+                <a href="#" class="flex items-center justify-between p-4 bg-white hover:bg-gray-50">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-user-shield text-gray-500"></i>
+                        </div>
+                        <span class="text-gray-700">Privacy Policy</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                </a>
+                
+                <!-- App Version -->
+                <div class="flex items-center justify-between p-4 bg-white">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-code text-gray-500"></i>
+                        </div>
+                        <span class="text-gray-700">App Version</span>
+                    </div>
+                    <span class="text-gray-500">1.0.0</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sign Out Button -->
+        <div class="px-4 py-6">
+            <a href="index.html" class="block w-full py-3 bg-red-500 text-white rounded-xl font-medium text-center">
+                Sign Out
+            </a>
+        </div>
+    </div>
+</body>
+</html>
