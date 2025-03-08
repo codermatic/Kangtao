@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Around - Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0071e3', // Apple blue
+                        secondary: '#f5f5f7', // Apple light gray
+                        dark: '#1d1d1f', // Apple dark
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            /* iPhone 15 Pro dimensions */
+            max-width: 393px;
+            margin: 0 auto;
+            min-height: 852px;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+        }
+        .notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 160px;
+            height: 30px;
+            background-color: black;
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            z-index: 1000;
+        }
+        .safe-area {
+            padding-top: 50px;
+            padding-bottom: 84px; /* Bottom nav + padding */
+            flex: 1;
+            overflow-y: auto;
+        }
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 393px; /* Match body max-width */
+            max-width: 100%;
+            height: 84px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-top: 1px solid #e5e7eb;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .scrollbar-hide {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        .message-bubble {
+            max-width: 75%;
+            border-radius: 18px;
+            padding: 10px 14px;
+            margin-bottom: 8px;
+            position: relative;
+        }
+        .message-sent {
+            background-color: #0071e3;
+            color: white;
+            border-bottom-right-radius: 4px;
+            align-self: flex-end;
+        }
+        .message-received {
+            background-color: #f2f2f7;
+            color: #1d1d1f;
+            border-bottom-left-radius: 4px;
+            align-self: flex-start;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- iPhone notch simulation -->
+    <div class="notch"></div>
+
+    <!-- Status Bar -->
+    <div class="fixed top-0 left-0 right-0 z-50 px-6 pt-2 pb-1 flex justify-between items-center">
+        <div class="text-sm font-medium">9:41</div>
+        <div class="flex items-center space-x-1.5">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+    
+    <div class="safe-area">
+        <!-- Header -->
+        <div class="px-4 py-2 flex items-center justify-between sticky top-0 bg-white z-10 border-b border-gray-200">
+            <h1 class="text-2xl font-bold text-dark">Messages</h1>
+            <button class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-edit text-gray-500"></i>
+            </button>
+        </div>
+        
+        <!-- Search Bar -->
+        <div class="px-4 py-3 sticky top-14 bg-white z-10">
+            <div class="flex items-center bg-gray-100 rounded-full px-4 py-2">
+                <i class="fas fa-search text-gray-500 mr-2"></i>
+                <input type="text" placeholder="Search messages..." class="bg-transparent border-none outline-none flex-1 text-sm">
+            </div>
+        </div>
+        
+        <!-- Chat List -->
+        <div class="px-4">
+            <!-- Chat Item 1 - Active Chat -->
+            <a href="#chat-view" class="flex items-center py-3 border-b border-gray-100 bg-blue-50 -mx-4 px-4">
+                <div class="relative">
+                    <div class="w-14 h-14 rounded-full overflow-hidden mr-3">
+                        <img src="https://randomuser.me/api/portraits/women/12.jpg" alt="Contact" class="w-full h-full object-cover">
+                    </div>
+                    <div class="absolute bottom-0 right-2 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white"></div>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-semibold text-dark">Emma Wilson</h3>
+                        <span class="text-xs text-gray-500">12:34 PM</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <p class="text-sm text-gray-600 truncate pr-4">See you at the jazz event tonight!</p>
+                        <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
+                            <span class="text-xs text-white font-medium">2</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            
+            <!-- Chat Item 2 -->
+            <a href="#" class="flex items-center py-3 border-b border-gray-100">
+                <div class="relative">
+                    <div class="w-14 h-14 rounded-full overflow-hidden mr-3">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Contact" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-semibold text-dark">James Rodriguez</h3>
+                        <span class="text-xs text-gray-500">Yesterday</span>
+                    </div>
+                    <p class="text-sm text-gray-500 truncate">Thanks for the event recommendation!</p>
+                </div>
+            </a>
+            
+            <!-- Chat Item 3 -->
+            <a href="#" class="flex items-center py-3 border-b border-gray-100">
+                <div class="relative">
+                    <div class="w-14 h-14 rounded-full overflow-hidden mr-3">
+                        <img src="https://randomuser.me/api/portraits/women/23.jpg" alt="Contact" class="w-full h-full object-cover">
+                    </div>
+                    <div class="absolute bottom-0 right-2 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white"></div>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-semibold text-dark">Sophia Chen</h3>
+                        <span class="text-xs text-gray-500">Wed</span>
+                    </div>
+                    <p class="text-sm text-gray-500 truncate">Are you going to the tech conference?</p>
+                </div>
+            </a>
+            
+            <!-- Chat Item 4 -->
+            <a href="#" class="flex items-center py-3 border-b border-gray-100">
+                <div class="relative">
+                    <div class="w-14 h-14 rounded-full overflow-hidden mr-3">
+                        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Contact" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-semibold text-dark">Michael Brown</h3>
+                        <span class="text-xs text-gray-500">Tue</span>
+                    </div>
+                    <p class="text-sm text-gray-500 truncate">Let's meet up at the food truck festival</p>
+                </div>
+            </a>
+            
+            <!-- Chat Item 5 -->
+            <a href="#" class="flex items-center py-3 border-b border-gray-100">
+                <div class="relative">
+                    <div class="w-14 h-14 rounded-full overflow-hidden mr-3">
+                        <img src="https://randomuser.me/api/portraits/women/67.jpg" alt="Contact" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-semibold text-dark">Olivia Taylor</h3>
+                        <span class="text-xs text-gray-500">Mon</span>
+                    </div>
+                    <p class="text-sm text-gray-500 truncate">The yoga class was amazing!</p>
+                </div>
+            </a>
+            
+            <!-- Chat Item 6 -->
+            <a href="#" class="flex items-center py-3 border-b border-gray-100">
+                <div class="relative">
+                    <div class="w-14 h-14 rounded-full overflow-hidden mr-3">
+                        <img src="https://randomuser.me/api/portraits/men/52.jpg" alt="Contact" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-semibold text-dark">Daniel Kim</h3>
+                        <span class="text-xs text-gray-500">Last week</span>
+                    </div>
+                    <p class="text-sm text-gray-500 truncate">I'll bring some friends to the concert</p>
+                </div>
+            </a>
+        </div>
+        
+        <!-- Chat View (Hidden by default, would be shown when a chat is selected) -->
+        <div id="chat-view" class="fixed inset-0 bg-white z-50 flex flex-col" style="display: none;">
+            <!-- Chat Header -->
+            <div class="px-4 py-2 flex items-center border-b border-gray-200 sticky top-0 bg-white z-10">
+                <a href="#" onclick="document.getElementById('chat-view').style.display = 'none'; return false;" class="w-10 h-10 flex items-center justify-center mr-2">
+                    <i class="fas fa-chevron-left text-gray-700"></i>
+                </a>
+                <div class="flex items-center flex-1">
+                    <div class="w-10 h-10 rounded-full overflow-hidden mr-3">
+                        <img src="https://randomuser.me/api/portraits/women/12.jpg" alt="Contact" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-dark">Emma Wilson</h3>
+                        <p class="text-xs text-green-500">Online</p>
+                    </div>
+                </div>
+                <button class="w-10 h-10 flex items-center justify-center">
+                    <i class="fas fa-phone text-gray-700"></i>
+                </button>
+                <button class="w-10 h-10 flex items-center justify-center">
+                    <i class="fas fa-video text-gray-700"></i>
+                </button>
+            </div>
+            
+            <!-- Chat Messages -->
+            <div class="flex-1 p-4 overflow-y-auto">
+                <!-- Date Separator -->
+                <div class="flex justify-center mb-4">
+                    <span class="text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full">Today</span>
+                </div>
+                
+                <!-- Received Message -->
+                <div class="flex items-end mb-4">
+                    <div class="w-8 h-8 rounded-full overflow-hidden mr-2 flex-shrink-0">
+                        <img src="https://randomuser.me/api/portraits/women/12.jpg" alt="Contact" class="w-full h-full object-cover">
+                    </div>
+                    <div class="message-bubble message-received">
+                        <p>Hey! Are you going to the jazz event tonight?</p>
+                    </div>
+                </div>
+                
+                <!-- Sent Message -->
+                <div class="flex flex-row-reverse items-end mb-4">
+                    <div class="message-bubble message-sent">
+                        <p>Yes, I already got tickets! So excited!</p>
+                    </div>
+                </div>
+                
+                <!-- Received Message -->
+                <div class="flex items-end mb-4">
+                    <div class="w-8 h-8 rounded-full overflow-hidden mr-2 flex-shrink-0">
+                        <img src="https://randomuser.me/api/portraits/women/12.jpg" alt="Contact" class="w-full h-full object-cover">
+                    </div>
+                    <div class="message-bubble message-received">
+                        <p>Great! I'll be there with a few friends. Want to meet up before the show?</p>
+                    </div>
+                </div>
+                
+                <!-- Sent Message -->
+                <div class="flex flex-row-reverse items-end mb-4">
+                    <div class="message-bubble message-sent">
+                        <p>Sounds perfect! How about we meet at the coffee shop across the street at 7?</p>
+                    </div>
+                </div>
+                
+                <!-- Received Message -->
+                <div class="flex items-end mb-4">
+                    <div class="w-8 h-8 rounded-full overflow-hidden mr-2 flex-shrink-0">
+                        <img src="https://randomuser.me/api/portraits/women/12.jpg" alt="Contact" class="w-full h-full object-cover">
+                    </div>
+                    <div class="message-bubble message-received">
+                        <p>Perfect! See you at 7 then 😊</p>
+                    </div>
+                </div>
+                
+                <!-- Sent Message -->
+                <div class="flex flex-row-reverse items-end mb-4">
+                    <div class="message-bubble message-sent">
+                        <p>Looking forward to it!</p>
+                    </div>
+                </div>
+                
+                <!-- Received Message -->
+                <div class="flex items-end mb-4">
+                    <div class="w-8 h-8 rounded-full overflow-hidden mr-2 flex-shrink-0">
+                        <img src="https://randomuser.me/api/portraits/women/12.jpg" alt="Contact" class="w-full h-full object-cover">
+                    </div>
+                    <div class="message-bubble message-received">
+                        <p>See you at the jazz event tonight!</p>
+                    </div>
+                </div>
+                
+                <!-- Message Time -->
+                <div class="flex justify-center mb-4">
+                    <span class="text-xs text-gray-500">12:34 PM</span>
+                </div>
+            </div>
+            
+            <!-- Message Input -->
+            <div class="p-3 border-t border-gray-200 bg-white">
+                <div class="flex items-center bg-gray-100 rounded-full px-4 py-2">
+                    <button class="w-8 h-8 flex items-center justify-center text-gray-500">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <input type="text" placeholder="Message..." class="bg-transparent border-none outline-none flex-1 mx-2 text-sm">
+                    <button class="w-8 h-8 flex items-center justify-center text-gray-500">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button class="w-8 h-8 flex items-center justify-center text-primary ml-1">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav flex items-center justify-around px-6">
+        <a href="home.html" class="flex flex-col items-center">
+            <div class="w-10 h-10 flex items-center justify-center text-gray-400">
+                <i class="fas fa-home text-xl"></i>
+            </div>
+            <span class="text-xs font-medium text-gray-400">Home</span>
+        </a>
+        <a href="events.html" class="flex flex-col items-center">
+            <div class="w-10 h-10 flex items-center justify-center text-gray-400">
+                <i class="fas fa-calendar-alt text-xl"></i>
+            </div>
+            <span class="text-xs font-medium text-gray-400">Events</span>
+        </a>
+        <a href="chat.html" class="flex flex-col items-center">
+            <div class="w-10 h-10 flex items-center justify-center text-primary">
+                <i class="fas fa-comment-alt text-xl"></i>
+            </div>
+            <span class="text-xs font-medium text-primary">Chat</span>
+        </a>
+        <a href="profile.html" class="flex flex-col items-center">
+            <div class="w-10 h-10 flex items-center justify-center text-gray-400">
+                <i class="fas fa-user text-xl"></i>
+            </div>
+            <span class="text-xs font-medium text-gray-400">Profile</span>
+        </a>
+    </div>
+    
+    <script>
+        // Show chat view when clicking on a chat item
+        document.querySelectorAll('a[href="#chat-view"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('chat-view').style.display = 'flex';
+            });
+        });
+    </script>
+</body>
+</html>
