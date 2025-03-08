@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Around - App Showcase</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0071e3', // Apple blue
+                        secondary: '#f5f5f7', // Apple light gray
+                        dark: '#1d1d1f', // Apple dark
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f5f5f7;
+        }
+        .phone-frame {
+            width: 393px;
+            height: 852px;
+            background-color: white;
+            border-radius: 40px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 14px solid #1d1d1f;
+        }
+        .notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 160px;
+            height: 30px;
+            background-color: black;
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            z-index: 1000;
+        }
+        .iframe-container {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-8">
+    <div class="max-w-4xl mx-auto text-center mb-12">
+        <h1 class="text-4xl font-bold text-dark mb-4">Around App Showcase</h1>
+        <p class="text-xl text-gray-600 mb-8">Explore our event-based social app prototype with a map-centric UI</p>
+        
+        <div class="flex flex-wrap justify-center gap-4 mb-8">
+            <a href="#login" class="px-6 py-3 bg-primary text-white rounded-full font-medium hover:bg-primary/90 transition-colors">
+                Login Screen
+            </a>
+            <a href="#home" class="px-6 py-3 bg-primary text-white rounded-full font-medium hover:bg-primary/90 transition-colors">
+                Home
+            </a>
+            <a href="#events" class="px-6 py-3 bg-primary text-white rounded-full font-medium hover:bg-primary/90 transition-colors">
+                Events
+            </a>
+            <a href="#event-details" class="px-6 py-3 bg-primary text-white rounded-full font-medium hover:bg-primary/90 transition-colors">
+                Event Details
+            </a>
+            <a href="#profile" class="px-6 py-3 bg-primary text-white rounded-full font-medium hover:bg-primary/90 transition-colors">
+                Profile
+            </a>
+            <a href="#chat" class="px-6 py-3 bg-primary text-white rounded-full font-medium hover:bg-primary/90 transition-colors">
+                Chat
+            </a>
+            <a href="#settings" class="px-6 py-3 bg-primary text-white rounded-full font-medium hover:bg-primary/90 transition-colors">
+                Settings
+            </a>
+        </div>
+    </div>
+    
+    <div class="phone-frame" id="phone-container">
+        <div class="notch"></div>
+        <div class="iframe-container">
+            <iframe src="index.html" id="app-frame" title="Around App"></iframe>
+        </div>
+    </div>
+    
+    <div class="mt-12 text-center">
+        <p class="text-gray-600 mb-4">This is a high-fidelity prototype for iPhone 15 Pro (393x852 pixels)</p>
+        <div class="flex justify-center space-x-4">
+            <a href="https://github.com/codermatic/Kangtao" target="_blank" class="text-primary hover:underline">
+                <i class="fab fa-github mr-1"></i> View on GitHub
+            </a>
+            <a href="README.md" target="_blank" class="text-primary hover:underline">
+                <i class="fas fa-book mr-1"></i> Documentation
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        // Handle navigation between pages
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const page = this.getAttribute('href').substring(1);
+                const iframe = document.getElementById('app-frame');
+                
+                switch(page) {
+                    case 'login':
+                        iframe.src = 'index.html';
+                        break;
+                    case 'home':
+                        iframe.src = 'home.html';
+                        break;
+                    case 'events':
+                        iframe.src = 'events.html';
+                        break;
+                    case 'event-details':
+                        iframe.src = 'event-details.html';
+                        break;
+                    case 'profile':
+                        iframe.src = 'profile.html';
+                        break;
+                    case 'chat':
+                        iframe.src = 'chat.html';
+                        break;
+                    case 'settings':
+                        iframe.src = 'settings.html';
+                        break;
+                    default:
+                        iframe.src = 'index.html';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
