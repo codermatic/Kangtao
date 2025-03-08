@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Around - Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0071e3', // Apple blue
+                        secondary: '#f5f5f7', // Apple light gray
+                        dark: '#1d1d1f', // Apple dark
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            /* iPhone 15 Pro dimensions */
+            max-width: 393px;
+            margin: 0 auto;
+            min-height: 852px;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+        }
+        .notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 160px;
+            height: 30px;
+            background-color: black;
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            z-index: 1000;
+        }
+        .safe-area {
+            padding-top: 50px;
+            padding-bottom: 84px; /* Bottom nav + padding */
+            flex: 1;
+            overflow-y: auto;
+        }
+        .bottom-nav {
+            position: fixed; /* Changed from absolute to fixed */
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 393px; /* Match body max-width */
+            max-width: 100%;
+            height: 84px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-top: 1px solid #e5e7eb;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        /* Map Pulse Animation */
+        .pulse {
+            overflow: visible;
+            position: relative;
+        }
+        .pulse::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 30px;
+            background-color: rgba(0, 113, 227, 0.5);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(2);
+                opacity: 0;
+            }
+        }
+        /* Event marker styles */
+        .event-marker {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: white;
+            border: 3px solid #0071e3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .event-marker:hover, .event-marker:active {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+        @keyframes slight-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        @keyframes slight-bounce-delayed {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        .animate-slight-bounce {
+            animation: slight-bounce 2s infinite ease-in-out;
+        }
+        .animate-slight-bounce-delayed {
+            animation: slight-bounce-delayed 2s infinite ease-in-out 0.5s;
+        }
+        
+        /* Add press/click animation for map markers */
+        @keyframes press-effect {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.9); }
+            100% { transform: scale(1.1); }
+        }
+        .marker-press {
+            animation: press-effect 0.4s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- iPhone notch simulation -->
+    <div class="notch"></div>
+
+    <!-- Status Bar -->
+    <div class="fixed top-0 left-0 right-0 z-50 px-6 pt-2 pb-1 flex justify-between items-center">
+        <div class="text-sm font-medium">9:41</div>
+        <div class="flex items-center space-x-1.5">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+    
+    <div class="safe-area">
+        <!-- Top Search & Filter Bar -->
+        <div class="px-4 py-2 flex items-center justify-between sticky top-0 bg-white z-10">
+            <div class="flex items-center flex-1 bg-gray-100 rounded-full px-4 py-2">
+                <i class="fas fa-search text-gray-500 mr-2"></i>
+                <input type="text" placeholder="Search events, places..." class="bg-transparent border-none outline-none flex-1 text-sm">
+            </div>
+            <button class="ml-2 w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                <i class="fas fa-sliders-h text-white"></i>
+            </button>
+        </div>
+        
+        <!-- Map container with vibrant markers -->
+        <div class="relative w-full h-64 bg-gray-100 overflow-hidden rounded-xl mb-4">
+            <!-- Map background (placeholder) -->
+            <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Map" class="w-full h-full object-cover">
+            
+            <!-- Cartoonish Map Markers/Balloons in Waze style -->
+            <!-- Event 1 marker -->
+            <div class="absolute" style="top: 35%; left: 25%;">
+                <div class="flex flex-col items-center">
+                    <!-- Waze-style balloon with shadow and bounce animation -->
+                    <div class="relative">
+                        <div class="w-14 h-14 bg-purple-500 rounded-full flex items-center justify-center shadow-lg transform hover:scale-110 transition-transform animate-slight-bounce" 
+                             style="box-shadow: 0 4px 0 rgba(91, 33, 182, 0.4);">
+                            <div class="w-12 h-12 bg-purple-400 rounded-full flex items-center justify-center">
+                                <i class="fas fa-music text-white text-xl"></i>
+                            </div>
+                        </div>
+                        <!-- Cartoon-style pointer -->
+                        <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-500 rotate-45"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Event 2 marker -->
+            <div class="absolute" style="top: 40%; left: 55%;">
+                <div class="flex flex-col items-center">
+                    <div class="relative">
+                        <div class="w-14 h-14 bg-green-500 rounded-full flex items-center justify-center shadow-lg transform hover:scale-110 transition-transform animate-slight-bounce-delayed" 
+                             style="box-shadow: 0 4px 0 rgba(16, 185, 129, 0.4);">
+                            <div class="w-12 h-12 bg-green-400 rounded-full flex items-center justify-center">
+                                <i class="fas fa-utensils text-white text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-green-500 rotate-45"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Event 3 marker -->
+            <div class="absolute" style="top: 55%; left: 70%;">
+                <div class="flex flex-col items-center">
+                    <div class="relative">
+                        <div class="w-14 h-14 bg-pink-500 rounded-full flex items-center justify-center shadow-lg transform hover:scale-110 transition-transform animate-slight-bounce" 
+                             style="box-shadow: 0 4px 0 rgba(236, 72, 153, 0.4);">
+                            <div class="w-12 h-12 bg-pink-400 rounded-full flex items-center justify-center">
+                                <i class="fas fa-glass-cheers text-white text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-pink-500 rotate-45"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- User location marker (blue dot with pulsing effect) -->
+            <div class="absolute" style="bottom: 30%; left: 40%;">
+                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center relative">
+                    <div class="w-6 h-6 bg-blue-400 rounded-full absolute"></div>
+                    <div class="w-8 h-8 bg-blue-500 rounded-full animate-ping absolute opacity-75"></div>
+                </div>
+            </div>
+            
+            <!-- Map controls -->
+            <div class="absolute right-3 bottom-3 flex flex-col space-y-2">
+                <button class="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center">
+                    <i class="fas fa-plus text-gray-600"></i>
+                </button>
+                <button class="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center">
+                    <i class="fas fa-minus text-gray-600"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Nearby Events Section -->
+        <div class="px-4 pt-4">
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="text-lg font-bold text-dark">Nearby Events</h2>
+                <a href="events.html" class="text-sm text-primary font-medium">See All</a>
+            </div>
+            
+            <!-- Event Cards Horizontal Scroll -->
+            <div class="flex space-x-4 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-hide">
+                <!-- Event Card 1 -->
+                <a href="event-details.html" class="flex-shrink-0 w-64 rounded-xl overflow-hidden shadow-sm border border-gray-200">
+                    <div class="relative h-32">
+                        <img src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Event" class="w-full h-full object-cover">
+                        <div class="absolute top-2 right-2 bg-white/90 rounded-full py-1 px-2 text-xs font-medium">Tonight</div>
+                    </div>
+                    <div class="p-3">
+                        <div class="flex items-center mb-1">
+                            <span class="text-xs font-medium text-gray-500">8:00 PM</span>
+                            <span class="mx-1 text-gray-300">•</span>
+                            <span class="text-xs font-medium text-gray-500">0.8 mi</span>
+                        </div>
+                        <h3 class="font-semibold text-dark mb-1 line-clamp-1">Live Jazz at Blue Note</h3>
+                        <p class="text-xs text-gray-500 mb-2 line-clamp-1">123 Music Ave, Downtown</p>
+                        <div class="flex items-center">
+                            <div class="flex -space-x-2">
+                                <img src="https://randomuser.me/api/portraits/women/12.jpg" class="w-6 h-6 rounded-full border border-white" alt="Attendee">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-6 h-6 rounded-full border border-white" alt="Attendee">
+                                <img src="https://randomuser.me/api/portraits/women/23.jpg" class="w-6 h-6 rounded-full border border-white" alt="Attendee">
+                            </div>
+                            <span class="text-xs text-gray-500 ml-1">+42 going</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- Event Card 2 -->
+                <a href="event-details.html" class="flex-shrink-0 w-64 rounded-xl overflow-hidden shadow-sm border border-gray-200">
+                    <div class="relative h-32">
+                        <img src="https://images.unsplash.com/photo-1555244162-803834f70033?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Event" class="w-full h-full object-cover">
+                        <div class="absolute top-2 right-2 bg-white/90 rounded-full py-1 px-2 text-xs font-medium">Tomorrow</div>
+                    </div>
+                    <div class="p-3">
+                        <div class="flex items-center mb-1">
+                            <span class="text-xs font-medium text-gray-500">7:30 PM</span>
+                            <span class="mx-1 text-gray-300">•</span>
+                            <span class="text-xs font-medium text-gray-500">1.2 mi</span>
+                        </div>
+                        <h3 class="font-semibold text-dark mb-1 line-clamp-1">Food Truck Festival</h3>
+                        <p class="text-xs text-gray-500 mb-2 line-clamp-1">Civic Center Plaza</p>
+                        <div class="flex items-center">
+                            <div class="flex -space-x-2">
+                                <img src="https://randomuser.me/api/portraits/men/45.jpg" class="w-6 h-6 rounded-full border border-white" alt="Attendee">
+                                <img src="https://randomuser.me/api/portraits/women/67.jpg" class="w-6 h-6 rounded-full border border-white" alt="Attendee">
+                                <img src="https://randomuser.me/api/portraits/men/22.jpg" class="w-6 h-6 rounded-full border border-white" alt="Attendee">
+                            </div>
+                            <span class="text-xs text-gray-500 ml-1">+89 going</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- Event Card 3 -->
+                <a href="event-details.html" class="flex-shrink-0 w-64 rounded-xl overflow-hidden shadow-sm border border-gray-200">
+                    <div class="relative h-32">
+                        <img src="https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Event" class="w-full h-full object-cover">
+                        <div class="absolute top-2 right-2 bg-white/90 rounded-full py-1 px-2 text-xs font-medium">This Weekend</div>
+                    </div>
+                    <div class="p-3">
+                        <div class="flex items-center mb-1">
+                            <span class="text-xs font-medium text-gray-500">Sat, 8:00 PM</span>
+                            <span class="mx-1 text-gray-300">•</span>
+                            <span class="text-xs font-medium text-gray-500">2.5 mi</span>
+                        </div>
+                        <h3 class="font-semibold text-dark mb-1 line-clamp-1">Rooftop Cocktail Party</h3>
+                        <p class="text-xs text-gray-500 mb-2 line-clamp-1">Skyline Lounge, 30th Floor</p>
+                        <div class="flex items-center">
+                            <div class="flex -space-x-2">
+                                <img src="https://randomuser.me/api/portraits/women/28.jpg" class="w-6 h-6 rounded-full border border-white" alt="Attendee">
+                                <img src="https://randomuser.me/api/portraits/men/42.jpg" class="w-6 h-6 rounded-full border border-white" alt="Attendee">
+                                <img src="https://randomuser.me/api/portraits/women/56.jpg" class="w-6 h-6 rounded-full border border-white" alt="Attendee">
+                            </div>
+                            <span class="text-xs text-gray-500 ml-1">+64 going</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Popular Categories Section -->
+        <div class="px-4 pt-6 pb-4">
+            <h2 class="text-lg font-bold text-dark mb-3">Categories</h2>
+            <div class="grid grid-cols-4 gap-3">
+                <a href="#" class="flex flex-col items-center">
+                    <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mb-1">
+                        <i class="fas fa-music text-blue-500"></i>
+                    </div>
+                    <span class="text-xs text-gray-700">Music</span>
+                </a>
+                <a href="#" class="flex flex-col items-center">
+                    <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mb-1">
+                        <i class="fas fa-utensils text-green-500"></i>
+                    </div>
+                    <span class="text-xs text-gray-700">Food</span>
+                </a>
+                <a href="#" class="flex flex-col items-center">
+                    <div class="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center mb-1">
+                        <i class="fas fa-film text-purple-500"></i>
+                    </div>
+                    <span class="text-xs text-gray-700">Arts</span>
+                </a>
+                <a href="#" class="flex flex-col items-center">
+                    <div class="w-14 h-14 bg-yellow-100 rounded-full flex items-center justify-center mb-1">
+                        <i class="fas fa-running text-yellow-500"></i>
+                    </div>
+                    <span class="text-xs text-gray-700">Sports</span>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Trending Events Section -->
+        <div class="px-4 pt-2 pb-6">
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="text-lg font-bold text-dark">Trending Now</h2>
+                <a href="#" class="text-sm text-primary font-medium">See All</a>
+            </div>
+            
+            <!-- Trending Event -->
+            <a href="event-details.html" class="block rounded-xl overflow-hidden shadow-sm border border-gray-200 mb-4">
+                <div class="relative h-40">
+                    <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Event" class="w-full h-full object-cover">
+                    <div class="absolute top-2 right-2 bg-red-500 text-white rounded-full py-1 px-2 text-xs font-medium">Hot</div>
+                </div>
+                <div class="p-3">
+                    <div class="flex items-center mb-1">
+                        <span class="text-xs font-medium text-gray-500">Tomorrow, 9:00 PM</span>
+                        <span class="mx-1 text-gray-300">•</span>
+                        <span class="text-xs font-medium text-gray-500">1.5 mi</span>
+                    </div>
+                    <h3 class="font-semibold text-dark mb-1">Annual Tech Conference 2023</h3>
+                    <p class="text-xs text-gray-500 mb-2">Convention Center, Main Hall</p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="flex -space-x-2">
+                                <img src="https://randomuser.me/api/portraits/men/52.jpg" class="w-6 h-6 rounded-full border border-white" alt="Attendee">
+                                <img src="https://randomuser.me/api/portraits/women/32.jpg" class="w-6 h-6 rounded-full border border-white" alt="Attendee">
+                                <img src="https://randomuser.me/api/portraits/men/22.jpg" class="w-6 h-6 rounded-full border border-white" alt="Attendee">
+                            </div>
+                            <span class="text-xs text-gray-500 ml-1">+215 going</span>
+                        </div>
+                        <span class="text-xs font-medium text-primary">Free</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav flex items-center justify-around px-6">
+        <a href="home.html" class="flex flex-col items-center">
+            <div class="w-10 h-10 flex items-center justify-center text-primary">
+                <i class="fas fa-home text-xl"></i>
+            </div>
+            <span class="text-xs font-medium text-primary">Home</span>
+        </a>
+        <a href="events.html" class="flex flex-col items-center">
+            <div class="w-10 h-10 flex items-center justify-center text-gray-400">
+                <i class="fas fa-calendar-alt text-xl"></i>
+            </div>
+            <span class="text-xs font-medium text-gray-400">Events</span>
+        </a>
+        <a href="chat.html" class="flex flex-col items-center">
+            <div class="w-10 h-10 flex items-center justify-center text-gray-400">
+                <i class="fas fa-comment-alt text-xl"></i>
+            </div>
+            <span class="text-xs font-medium text-gray-400">Chat</span>
+        </a>
+        <a href="profile.html" class="flex flex-col items-center">
+            <div class="w-10 h-10 flex items-center justify-center text-gray-400">
+                <i class="fas fa-user text-xl"></i>
+            </div>
+            <span class="text-xs font-medium text-gray-400">Profile</span>
+        </a>
+    </div>
+
+<script>
+    // Add click event handlers to all map markers after the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get all marker elements
+        const markers = document.querySelectorAll('.w-14.h-14.bg-purple-500, .w-14.h-14.bg-green-500, .w-14.h-14.bg-pink-500');
+        
+        // Add click event listener to each marker
+        markers.forEach(marker => {
+            marker.addEventListener('click', function() {
+                // Remove press animation class from all markers
+                markers.forEach(m => m.classList.remove('marker-press'));
+                
+                // Add press animation class to the clicked marker
+                this.classList.add('marker-press');
+                
+                // Navigate to event details after a short delay
+                setTimeout(() => {
+                    window.location.href = 'event-details.html';
+                }, 300);
+            });
+            
+            // Make the markers look clickable
+            marker.style.cursor = 'pointer';
+        });
+    });
+</script>
+</body>
+</html>
